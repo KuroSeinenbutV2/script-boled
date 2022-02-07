@@ -8,10 +8,10 @@ echo "Downloading few Dependecies . . ."
 git clone --depth=1 https://github.com/rubyzee/AliceTC AliceTC
 
 # Main Declaration
-KERNEL_NAME=Strelica
+export KERNEL_NAME=$(cat "arch/arm64/configs/$DEVICE_DEFCONFIG" | grep "CONFIG_LOCALVERSION=" | sed 's/CONFIG_LOCALVERSION="-*//g' | sed 's/"*//g' )
 KERNEL_ROOTDIR=$(pwd) # IMPORTANT ! Fill with your kernel source root directory.
-DEVICE_CODENAME=Merlin
-DEVICE_DEFCONFIG=merlin_defconfig # IMPORTANT ! Declare your kernel source defconfig file here.
+DEVICE_CODENAME=$DEVICE_CODENAME
+DEVICE_DEFCONFIG=$DEVICE_DEFCONFIG # IMPORTANT ! Declare your kernel source defconfig file here.
 CLANG_ROOTDIR=$(pwd)/AliceTC # IMPORTANT! Put your clang directory here.
 export KBUILD_BUILD_USER=Alicia # Change with your own name or else.
 export KBUILD_BUILD_HOST=XZI-TEAM # Change with your own hostname.
@@ -19,6 +19,7 @@ CLANG_VER="$("$CLANG_ROOTDIR"/bin/clang --version | head -n 1 | perl -pe 's/\(ht
 LLD_VER="$("$CLANG_ROOTDIR"/bin/ld.lld --version | head -n 1)"
 export KBUILD_COMPILER_STRING="$CLANG_VER with $LLD_VER"
 IMAGE=$(pwd)/out/arch/arm64/boot/Image.gz-dtb
+HEADCOMMITID="$(git log --pretty=format:'%h' -n1)"
 DATE=$(date +"%F-%S")
 DATE2=$(date +"%m%d")
 START=$(date +"%s")
@@ -57,14 +58,15 @@ tg_post_msg() {
 }
 
 # Post Main Information
-tg_post_msg "<b>xKernelCompiler</b>%0ABuilder Name : <code>${KBUILD_BUILD_USER}</code>%0ABuilder Host : <code>${KBUILD_BUILD_HOST}</code>%0ADevice Defconfig: <code>${DEVICE_DEFCONFIG}</code>%0AClang Version : <code>${KBUILD_COMPILER_STRING}</code>%0AClang Rootdir : <code>${CLANG_ROOTDIR}</code>%0AKernel Rootdir : <code>${KERNEL_ROOTDIR}</code>"
+tg_post_msg "<b>KernelCompiler</b>%0AKernel Name : <code>${KERNEL_NAME}</code>%0AKernel Version : <code>${KERVER}</code>%0ABuild Date : <code>${DATE}</code>%0ABuilder Name : <code>${KBUILD_BUILD_USER}</code>%0ABuilder Host : <code>${KBUILD_BUILD_HOST}</code>%0ADevice Defconfig: <code>${DEVICE_DEFCONFIG}</code>%0AClang Version : <code>${KBUILD_COMPILER_STRING}</code>%0AClang Rootdir : <code>${CLANG_ROOTDIR}</code>%0AKernel Rootdir : <code>${KERNEL_ROOTDIR}</code>"
 
 # Compile
 compile(){
-tg_post_msg "<b>xKernelCompiler:</b><code>Compilation has started</code>"
+tg_post_msg "<b>KernelCompiler:</b><code>Compilation has started</code>"
 cd ${KERNEL_ROOTDIR}
 make -j$(nproc) O=out ARCH=arm64 ${DEVICE_DEFCONFIG}
 make -j$(nproc) ARCH=arm64 O=out \
+    LD_LIBRARY_PATH="${CLANG_ROOTDIR}/lib64:${LD_LIBRARY_PATH}" \
     CC=${CLANG_ROOTDIR}/bin/clang \
     AR=${CLANG_ROOTDIR}/bin/llvm-ar \
     NM=${CLANG_ROOTDIR}/bin/llvm-nm \
@@ -94,7 +96,7 @@ function push() {
         -F chat_id="$TG_CHAT_ID" \
         -F "disable_web_page_preview=true" \
         -F "parse_mode=html" \
-        -F caption="Compile took $(($DIFF / 60)) minute(s) and $(($DIFF % 60)) second(s). | For <b>$DEVICE_CODENAME</b> | <b>${KBUILD_COMPILER_STRING}</b>"
+        -F caption="✅ Compile took $(($DIFF / 60)) minute(s) and $(($DIFF % 60)) second(s). | For <b>$DEVICE_CODENAME</b> | <b>${KBUILD_COMPILER_STRING}</b>"
 }
 # Fin Error
 function finerr() {
@@ -102,14 +104,14 @@ function finerr() {
         -d chat_id="$TG_CHAT_ID" \
         -d "disable_web_page_preview=true" \
         -d "parse_mode=markdown" \
-        -d text="Build throw an error(s)"
+        -d text="❌ Build failed to compile after $((DIFF / 60)) minute(s) and $((DIFF % 60)) seconds</b>"
     exit 1
 }
 
 # Zipping
 function zipping() {
     cd AnyKernel || exit 1
-    zip -r9 [$DATE2][AliceTC][$KERVER][R-OSS]$KERNEL_NAME[$DEVICE_CODENAME]${DATE}.zip *
+    zip -r9 [$DATE2][AliceTC][$KERVER][R-OSS]$KERNEL_NAME[$DEVICE_CODENAME]$HEADCOMMITID.zip *
     cd ..
 }
 check

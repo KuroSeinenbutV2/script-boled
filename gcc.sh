@@ -36,14 +36,14 @@ err() {
 KERNEL_DIR=$PWD
 
 # The name of the Kernel, to name the ZIP
-ZIPNAME=Strelica"
+export ZIPNAME=$(cat "arch/arm64/configs/$DEVICE_DEFCONFIG" | grep "CONFIG_LOCALVERSION=" | sed 's/CONFIG_LOCALVERSION="-*//g' | sed 's/"*//g' )
 
 # The codename of the device
-DEVICE="merlin"
+DEVICE_CODENAME=$DEVICE_CODENAME
 
 # The defconfig which should be used. Get it from config.gz from
 # your device or check source
-DEFCONFIG=merlin_defconfig
+DEVICE_DEFCONFIG=$DEVICE_DEFCONFIG
 
 # Build Type
 TYPE=R-OSS
@@ -72,7 +72,7 @@ export CHATID="-1001711585630"
 
 #Check Kernel Version
 KERVER=$(make kernelversion)
-
+HEADCOMMITID="$(git log --pretty=format:'%h' -n1)"
 
 # Set a commit head
 COMMIT_HEAD=$(git log --oneline -1)
@@ -94,8 +94,8 @@ COMMIT_HEAD=$(git log --oneline -1)
 ##------------------------------------------------------##
 
 exports() {
-	export KBUILD_BUILD_USER="Egii"
-	export KBUILD_BUILD_HOST="Korban-Janji"
+	export KBUILD_BUILD_USER="Alicia"
+	export KBUILD_BUILD_HOST="XZI-TEAM"
 	export ARCH=arm64
 	export SUBARCH=arm64
 
@@ -140,7 +140,7 @@ build_kernel() {
 
 	msg "|| Started Compilation ||"
 	BUILD_START=$(date +"%s")
-	make O=out $DEFCONFIG
+	make O=out $DEVICE_DEFCONFIG
 	make -j"$PROCS" O=out
 
 	BUILD_END=$(date +"%s")
@@ -164,10 +164,10 @@ gen_zip() {
     mv $DTB AnyKernel3/dtb
 	mv "$KERNEL_DIR"/out/arch/arm64/boot/Image.gz-dtb AnyKernel3/Image.gz-dtb
 	cd AnyKernel3 || exit
-	zip -r9 [$GetBD][$KERVER][$VARIANT]$ZIPNAME[$TYPE]$DEVICE-$GetCBD ./* -x .git README.md
+	zip -r9 [$GetBD][$KERVER][$VARIANT]$ZIPNAME[$TYPE]$DEVICE_CODENAME-$HEADCOMMITID ./* -x .git README.md
 
 	## Prepare a final zip variable
-	ZIP_FINAL="[$GetBD][$KERVER][$VARIANT]$ZIPNAME[$TYPE]$DEVICE-$GetCBD.zip"
+	ZIP_FINAL="[$GetBD][$KERVER][$VARIANT]$ZIPNAME[$TYPE]$DEVICE-$HEADCOMMITID.zip"
 	tg_post_build "$ZIP_FINAL" "$CHATID" "✅ Build took : $((DIFF / 60)) minute(s) and $((DIFF % 60)) second(s)"
 	cd ..
 }

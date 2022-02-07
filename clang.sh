@@ -30,16 +30,17 @@ tar -xf gcc32.tar.gz -C $GCCbPath
 #Main2
 export TZ="Asia/Jakarta"
 KERNEL_ROOTDIR=$(pwd) # IMPORTANT ! Fill with your kernel source root directory.
-DEVICE_CODENAME=merlin
-KERNEL_DEFCONFIG=merlin_defconfig
-export KERNELNAME=Strelica
+DEVICE_CODENAME=$DEVICE_CODENAME
+DEVICE_DEFCONFIG=$DEVICE_DEFCONFIG
+export KERNEL_NAME=$(cat "arch/arm64/configs/$DEVICE_DEFCONFIG" | grep "CONFIG_LOCALVERSION=" | sed 's/CONFIG_LOCALVERSION="-*//g' | sed 's/"*//g' )
 export KBUILD_BUILD_USER=Alicia # Change with your own name or else.
-export KBUILD_BUILD_HOST=KorbanPerasaan # Change with your own hostname.
+export KBUILD_BUILD_HOST=XZI-TEAM # Change with your own hostname.
 IMAGE=$(pwd)/out/arch/arm64/boot/Image.gz
 CLANG_VER="$("$ClangPath"/bin/clang --version | head -n 1 | perl -pe 's/\(http.*?\)//gs' | sed -e 's/  */ /g' -e 's/[[:space:]]*$//')"
 LLD_VER="$("$ClangPath"/bin/ld.lld --version | head -n 1)"
 export KBUILD_COMPILER_STRING="$CLANG_VER with $LLD_VER"
 DATE=$(date +"%F-%S")
+DATE2=$(date +"%m%d")
 START=$(date +"%s")
 PATH=${ClangPath}/bin:${GCCaPath}/bin:${GCCbPath}/bin:${PATH}
 DTB=$(pwd)/out/arch/arm64/boot/dts/mediatek/mt6768.dtb
@@ -56,12 +57,16 @@ tg_post_msg() {
 
 }
 
+# Post Main Information
+tg_post_msg "<b>KernelCompiler</b>%0AKernel Name : <code>${KERNEL_NAME}</code>%0AKernel Version : <code>${KERVER}</code>%0ABuild Date : <code>${DATE}</code>%0ABuilder Name : <code>${KBUILD_BUILD_USER}</code>%0ABuilder Host : <code>${KBUILD_BUILD_HOST}</code>%0ADevice Defconfig: <code>${DEVICE_DEFCONFIG}</code>%0AClang Version : <code>${KBUILD_COMPILER_STRING}</code>%0AClang Rootdir : <code>${ClangPath}</code>%0AKernel Rootdir : <code>${KERNEL_ROOTDIR}</code>"
+
 # Compile
 compile(){
+tg_post_msg "<b>KernelCompiler:</b><code>Compilation has started</code>"
 cd ${KERNEL_ROOTDIR}
 export HASH_HEAD=$(git rev-parse --short HEAD)
 export COMMIT_HEAD=$(git log --oneline -1)
-make -j$(nproc) O=out ARCH=arm64 $KERNEL_DEFCONFIG
+make -j$(nproc) O=out ARCH=arm64 $DEVICE_DEFCONFIG
 make -j$(nproc) ARCH=arm64 O=out \
     LD_LIBRARY_PATH="${ClangPath}/lib64:${LD_LIBRARY_PATH}" \
     CC=${ClangPath}/bin/clang \
@@ -114,7 +119,7 @@ function finerr() {
 # Zipping
 function zipping() {
     cd AnyKernel || exit 1
-    zip -r9 $KERNELNAME-$DEVICE_CODENAME-$DATE.zip *
+    zip -r9 [$DATE2][$KERVER][R-OSS]$KERNEL_NAME[$DEVICE_CODENAME]${DATE}.zip *
     cd ..
 }
 compile
