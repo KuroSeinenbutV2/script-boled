@@ -5,9 +5,9 @@
 
 echo "Downloading few Dependecies . . ."
 # Kernel Sources
-git clone --depth=1 https://github.com/rubyzee/AliceTC AliceTC
-git clone --depth=1 https://github.com/rubyzee/gcc-arm64 GCC64
-git clone --depth=1 https://github.com/rubyzee/gcc-arm GCC32
+git clone --depth=1 https://github.com/aliciahouse/AliceTC AliceTC
+git clone --depth=1 https://github.com/aliciahouse/aarch64-linux-gnu GCC64
+git clone --depth=1 https://github.com/aliciahouse/arm-linux-gnueabi GCC32
 
 # Main Declaration
 export KERNEL_NAME=$(cat "arch/arm64/configs/$DEVICE_DEFCONFIG" | grep "CONFIG_LOCALVERSION=" | sed 's/CONFIG_LOCALVERSION="-*//g' | sed 's/"*//g' )
@@ -118,7 +118,7 @@ function finerr() {
 # Zipping
 function zipping() {
     cd AnyKernel || exit 1
-    zip -r9 [$DATE2][AliceTC][$KERVER][$TYPE][R-OSS]$KERNEL_NAME[$DEVICE_CODENAME]$HEADCOMMITID.zip *
+    zip -r9 [$DATE2][AliceTC][$KERVER]$KERNEL_NAME[$DEVICE_CODENAME][$TYPE][R-OSS]$HEADCOMMITID.zip *
     cd ..
 }
 check
