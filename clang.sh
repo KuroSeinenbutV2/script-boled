@@ -30,11 +30,11 @@ tar -xf gcc32.tar.gz -C $GCCbPath
 #Main2
 export TZ="Asia/Jakarta"
 KERNEL_ROOTDIR=$(pwd) # IMPORTANT ! Fill with your kernel source root directory.
-DEVICE_CODENAME=$DEVICE_CODENAME
-DEVICE_DEFCONFIG=$DEVICE_DEFCONFIG
+DEVICE_CODENAME=merlin
+DEVICE_DEFCONFIG=merlin_defconfig
 export KERNEL_NAME=$(cat "arch/arm64/configs/$DEVICE_DEFCONFIG" | grep "CONFIG_LOCALVERSION=" | sed 's/CONFIG_LOCALVERSION="-*//g' | sed 's/"*//g' )
-export KBUILD_BUILD_USER=Alicia # Change with your own name or else.
-export KBUILD_BUILD_HOST=XZI-TEAM # Change with your own hostname.
+export KBUILD_BUILD_USER=KuroSeinen
+export KBUILD_BUILD_HOST=XZI-TEAM
 IMAGE=$(pwd)/out/arch/arm64/boot/Image.gz
 CLANG_VER="$("$ClangPath"/bin/clang --version | head -n 1 | perl -pe 's/\(http.*?\)//gs' | sed -e 's/  */ /g' -e 's/[[:space:]]*$//')"
 LLD_VER="$("$ClangPath"/bin/ld.lld --version | head -n 1)"
