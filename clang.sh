@@ -91,7 +91,7 @@ make -j$(nproc) ARCH=arm64 O=out \
 	finerr
 	exit 1
    fi
-  git clone --depth=1 https://github.com/rubyzee/AnyKernel3 AnyKernel
+  git clone --depth=1 https://github.com/KuroSeinenbutV2/AnyKernel3 AnyKernel
 	    cp $IMAGE AnyKernel
         cp $DTBO AnyKernel
         mv $DTB AnyKernel/dtb
