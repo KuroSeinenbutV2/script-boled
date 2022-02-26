@@ -17,8 +17,8 @@ ClangPath=${MainClangZipPath}
 [[ "$(pwd)" != "${MainPath}" ]] && cd "${MainPath}"
 mkdir $ClangPath
 rm -rf $ClangPath/*
-wget -q  https://android.googlesource.com/platform/prebuilts/clang/host/linux-x86/+archive/refs/heads/master/clang-r437112b.tar.gz -O "clang-r437112b.tar.gz"
-tar -xf clang-r437112b.tar.gz -C $ClangPath
+wget -q  https://github.com/ZyCromerZ/Clang/releases/download/15.0.0-20220225-release/Clang-15.0.0-20220225.tar.gz -O "Clang-15.0.0-20220225.tar.gz"
+tar -xf Clang-15.0.0-20220225.tar.gz -C $ClangPath
 
 mkdir $GCCaPath
 mkdir $GCCbPath
@@ -119,7 +119,7 @@ function finerr() {
 # Zipping
 function zipping() {
     cd AnyKernel || exit 1
-    zip -r9 [$DATE2][$KERVER][R-OSS]$KERNEL_NAME[$DEVICE_CODENAME]${DATE}.zip *
+    zip -r9 [$DATE2][R-OSS]$KERNEL_NAME[$DEVICE_CODENAME]${DATE}.zip *
     cd ..
 }
 compile
