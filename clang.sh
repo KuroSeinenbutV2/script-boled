@@ -85,7 +85,8 @@ make -j$(nproc) ARCH=arm64 O=out \
     HOSTAR=${ClangPath}/bin/llvm-ar \
     HOSTLD=${ClangPath}/bin/ld.lld \
     HOSTCC=${ClangPath}/bin/clang \
-    HOSTCXX=${ClangPath}/bin/clang++
+    HOSTCXX=${ClangPath}/bin/clang++ \
+    2>&1 | tee error.log
 
    if ! [ -a "$IMAGE" ]; then
 	finerr
