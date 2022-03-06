@@ -15,7 +15,7 @@ DEVICE_DEFCONFIG=merlin_defconfig # IMPORTANT ! Declare your kernel source defco
 CLANG_ROOTDIR=$(pwd)/clang-llvm # IMPORTANT! Put your clang directory here.
 GCC64_DIR=$(pwd)/gcc64
 GCC32_DIR=$(pwd)/gcc32
-export KBUILD_BUILD_USER=Alicia # Change with your own name or else.
+export KBUILD_BUILD_USER=KuroSeinen
 export KBUILD_BUILD_HOST=XZI-TEAM # Change with your own hostname.
 CLANG_VER="$("$CLANG_ROOTDIR"/bin/clang --version | head -n 1 | perl -pe 's/\(http.*?\)//gs' | sed -e 's/  */ /g' -e 's/[[:space:]]*$//')"
 GCC_VER=$("$GCC64_DIR"/bin/aarch64-elf-gcc --version | head -n 1)
@@ -111,7 +111,7 @@ function finerr() {
 # Zipping
 function zipping() {
     cd AnyKernel || exit 1
-    zip -r9 [$DATE2][$KERVER]$KERNEL_NAME[$DEVICE_CODENAME][Q-OSS]$HEADCOMMITID.zip *
+    zip -r9 [Q-OSS][$DATE2][$KERVER]$KERNEL_NAME[$DEVICE_CODENAME]$HEADCOMMITID.zip *
     cd ..
 }
 check
