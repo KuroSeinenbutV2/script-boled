@@ -82,19 +82,19 @@ COMMIT_HEAD=$(git log --oneline -1)
  clone() {
 	echo " "
 		msg "|| Cloning GCC ||"
-		git clone --depth=1 https://github.com/aliciahouse/aarch64-linux-gnu gcc64
-		git clone --depth=1 https://github.com/aliciahouse/arm-linux-gnueabi gcc32
+		git clone --depth=1 https://github.com/ZyCromerZ/aarch64-zyc-linux-gnu gcc64
+		git clone --depth=1  https://github.com/ZyCromerZ/arm-zyc-linux-gnueabi gcc32
 		GCC64_DIR=$KERNEL_DIR/gcc64
 		GCC32_DIR=$KERNEL_DIR/gcc32
 
 	msg "|| Cloning Anykernel ||"
-	git clone --depth 1 --no-single-branch https://github.com/rubyzee/AnyKernel3
+	git clone --depth 1 --no-single-branch https://github.com/KuroSeinenbutV2/AnyKernel3
 }
 
 ##------------------------------------------------------##
 
 exports() {
-	export KBUILD_BUILD_USER="Alicia"
+	export KBUILD_BUILD_USER="KuroSeinen"
 	export KBUILD_BUILD_HOST="XZI-TEAM"
 	export ARCH=arm64
 	export SUBARCH=arm64
