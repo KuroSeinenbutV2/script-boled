@@ -88,7 +88,7 @@ make -j$(nproc) ARCH=arm64 O=out \
 # Zipping
 function zipping() {
     cd AnyKernel || exit 1
-    zip -r9 ($DATE2)$KERNEL_NAME($DEVICE_CODENAME)$(DATE).zip *
+    zip -r9 [$DATE2]$KERNEL_NAME[$DEVICE_CODENAME]$[DATE].zip *
     cd ..
 }
 compile
