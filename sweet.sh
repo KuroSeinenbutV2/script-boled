@@ -31,8 +31,8 @@ tar -xf gcc32.tar.gz -C $GCCbPath
 export TZ="Asia/Jakarta"
 KERNEL_ROOTDIR=$(pwd) # IMPORTANT ! Fill with your kernel source root directory.
 DEVICE_CODENAME=sweet
-DEVICE_DEFCONFIG=sweet_defconfig
-export KERNEL_NAME=$(cat "arch/arm64/configs/$DEVICE_DEFCONFIG" | grep "CONFIG_LOCALVERSION=" | sed 's/CONFIG_LOCALVERSION="-*//g' | sed 's/"*//g' )
+DEVICE_DEFCONFIG=sweet_user_defconfig
+export KERNEL_NAME=$(cat "arch/arm64/configs/vendor/$DEVICE_DEFCONFIG" | grep "CONFIG_LOCALVERSION=" | sed 's/CONFIG_LOCALVERSION="-*//g' | sed 's/"*//g' )
 export KBUILD_BUILD_USER=KuroSeinen
 export KBUILD_BUILD_HOST=XZI-TEAM
 IMAGE=$(pwd)/out/arch/arm64/boot/Image.gz
