@@ -238,7 +238,7 @@ build_end(){
     exit 1
   fi
   echo -e "${YELLOW}===> ${GREEN}Build success, generating flashable zip...${WHITE}"
-  cp ${KERNEL_DIR}/out/arch/arm64/boot/qcom/xiaomi-sdmagpie.dtb $KERNEL_DTB
+  cp ${KERNEL_DIR}/out/arch/arm64/boot/qcom/xiaomi-sdmmagpie.dtb $KERNEL_DTB
   ls ${KERNEL_DIR}/out/arch/arm64/boot/
   cp $KERNEL_DTBO $AK3
   cp $KERNEL_DTB $AK3
