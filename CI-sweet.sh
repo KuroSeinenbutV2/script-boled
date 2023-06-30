@@ -73,7 +73,7 @@ NPROC=$(nproc --all)
 AK3=${KERNEL_DIR}/AnyKernel3
 TOOLCHAIN=${KERNEL_DIR}/toolchain
 LOG=${KERNEL_DIR}/log.txt
-KERNEL_DTB=${KERNEL_DIR}/out/arch/arm64/boot/dtb
+KERNEL_DTB=${KERNEL_DIR}/out/arch/arm64/boot/qcom/xiaomi-sdmagpie.dtb
 KERNEL_DTB_IMG=${KERNEL_DIR}/out/arch/arm64/boot/dtb.img
 KERNEL_IMG=${KERNEL_DIR}/out/arch/arm64/boot/Image
 KERNEL_IMG_DTB=${KERNEL_DIR}/out/arch/arm64/boot/Image-dtb
@@ -238,7 +238,7 @@ build_end(){
     exit 1
   fi
   echo -e "${YELLOW}===> ${GREEN}Build success, generating flashable zip...${WHITE}"
-  cp ${KERNEL_DIR}/out/arch/arm64/boot/qcom/xiaomi-sdmmagpie.dtb $KERNEL_DTB
+  find ${KERNEL_DIR}/out/arch/arm64/boot/dts/qcom -name '*.dtb' -exec cat {} + > $KERNEL_DTB $KERNEL_DTB
   ls ${KERNEL_DIR}/out/arch/arm64/boot/
   cp $KERNEL_DTBO $AK3
   cp $KERNEL_DTB $AK3
